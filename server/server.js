@@ -17,6 +17,7 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
+const fs = require('fs');
 
 // Import database connection
 const db = require('./config/db');
@@ -83,22 +84,21 @@ app.get('/api/health', (req, res) => {
 // ============================================
 // SERVE FRONTEND (Production)
 // ============================================
-const clientBuildPath = path.join(__dirname, '..', 'client', 'dist');
-const fs = require('fs');
+// Try server/public first (for cloud deploy), then ../client/dist (for local dev)
+const publicPath = path.join(__dirname, 'public');
+const clientDistPath = path.join(__dirname, '..', 'client', 'dist');
+const clientBuildPath = fs.existsSync(publicPath) ? publicPath : clientDistPath;
+
+console.log('📂 Frontend path:', clientBuildPath, '| Exists:', fs.existsSync(clientBuildPath));
 
 if (fs.existsSync(clientBuildPath)) {
-  console.log('✅ Serving frontend from:', clientBuildPath);
-  // Serve static files from React build
   app.use(express.static(clientBuildPath));
-
-  // Catch-all: serve index.html for any non-API route (React Router)
   app.get('*', (req, res) => {
     res.sendFile(path.join(clientBuildPath, 'index.html'));
   });
 } else {
-  console.log('⚠️ Frontend build not found at:', clientBuildPath);
   app.get('/', (req, res) => {
-    res.send('🚀 VibeSync API is running! Frontend build not found.');
+    res.json({ message: '🎵 VibeSync API running. Frontend not found.' });
   });
 }
 
