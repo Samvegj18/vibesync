@@ -1,0 +1,2 @@
+# This directory stores uploaded files (playlist covers, avatars, etc.)
+# It is served as static files at /uploads/
