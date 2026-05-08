@@ -83,16 +83,24 @@ app.get('/api/health', (req, res) => {
 // ============================================
 // SERVE FRONTEND (Production)
 // ============================================
-const path = require('path');
 const clientBuildPath = path.join(__dirname, '..', 'client', 'dist');
+const fs = require('fs');
 
-// Serve static files from React build
-app.use(express.static(clientBuildPath));
+if (fs.existsSync(clientBuildPath)) {
+  console.log('✅ Serving frontend from:', clientBuildPath);
+  // Serve static files from React build
+  app.use(express.static(clientBuildPath));
 
-// Catch-all: serve index.html for any non-API route (React Router)
-app.get('*', (req, res) => {
-  res.sendFile(path.join(clientBuildPath, 'index.html'));
-});
+  // Catch-all: serve index.html for any non-API route (React Router)
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(clientBuildPath, 'index.html'));
+  });
+} else {
+  console.log('⚠️ Frontend build not found at:', clientBuildPath);
+  app.get('/', (req, res) => {
+    res.send('🚀 VibeSync API is running! Frontend build not found.');
+  });
+}
 
 // ============================================
 // ERROR HANDLING MIDDLEWARE
