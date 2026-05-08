@@ -16,6 +16,8 @@ const mysql = require('mysql2/promise');
 
 // Create a connection pool
 // Pool manages multiple connections efficiently
+const isCloud = process.env.DB_HOST && process.env.DB_HOST !== 'localhost';
+
 const pool = mysql.createPool({
   host: process.env.DB_HOST || 'localhost',
   user: process.env.DB_USER || 'root',
@@ -26,7 +28,10 @@ const pool = mysql.createPool({
   // Pool configuration
   waitForConnections: true,  // Wait if all connections are busy
   connectionLimit: 10,       // Maximum 10 simultaneous connections
-  queueLimit: 0              // Unlimited queue size
+  queueLimit: 0,             // Unlimited queue size
+
+  // SSL for cloud databases (Aiven, PlanetScale, etc.)
+  ...(isCloud && { ssl: { rejectUnauthorized: false } })
 });
 
 // Test the database connection on startup
