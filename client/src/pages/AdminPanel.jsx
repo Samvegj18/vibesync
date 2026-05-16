@@ -1,12 +1,14 @@
 /**
- * AdminPanel — Full platform management dashboard
+ * AdminPanel — Full platform management dashboard (Admin-only)
  */
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { Navigate } from 'react-router-dom'
 import {
   Shield, Users, Music, Palette, Mic2, Trash2, Plus, X,
-  TrendingUp, Heart, MessageCircle, Search, AlertTriangle
+  TrendingUp, Heart, MessageCircle, Search, AlertTriangle, Lock
 } from 'lucide-react'
+import { useAuth } from '../context/AuthContext'
 import API from '../api/axios'
 
 const TABS = [
@@ -17,6 +19,23 @@ const TABS = [
 ]
 
 export default function AdminPanel() {
+  const { user, loading } = useAuth()
+
+  // Block non-admin users
+  if (loading) return null
+  if (!user || !user.isAdmin) {
+    return (
+      <div className="min-h-screen pt-24 pb-12 px-4 flex items-center justify-center">
+        <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }}
+          className="glass rounded-2xl p-10 text-center max-w-md">
+          <Lock size={48} className="text-red-500 mx-auto mb-4" />
+          <h2 className="text-2xl font-bold mb-2">Access Denied</h2>
+          <p className="text-gray-400">You need admin privileges to access this page. Please log in with an admin account.</p>
+        </motion.div>
+      </div>
+    )
+  }
+
   const [tab, setTab] = useState('users')
   const [stats, setStats] = useState(null)
   const [users, setUsers] = useState([])

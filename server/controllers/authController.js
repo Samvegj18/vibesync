@@ -139,7 +139,8 @@ exports.login = async (req, res) => {
         avatar: user.avatar,
         bio: user.bio,
         vibeScore: user.vibe_score,
-        listeningStreak: user.listening_streak
+        listeningStreak: user.listening_streak,
+        isAdmin: user.is_admin === 1
       }
     });
 
@@ -158,7 +159,7 @@ exports.getMe = async (req, res) => {
     // req.user is set by the auth middleware
     const [users] = await db.query(
       `SELECT u.user_id, u.username, u.email, u.avatar, u.bio,
-              u.vibe_score, u.listening_streak, u.created_at,
+              u.vibe_score, u.listening_streak, u.created_at, u.is_admin,
               COUNT(DISTINCT p.playlist_id) AS playlist_count,
               COUNT(DISTINCT f1.following_id) AS following_count,
               COUNT(DISTINCT f2.follower_id) AS follower_count
@@ -187,6 +188,7 @@ exports.getMe = async (req, res) => {
       playlistCount: users[0].playlist_count,
       followingCount: users[0].following_count,
       followerCount: users[0].follower_count,
+      isAdmin: users[0].is_admin === 1,
     }});
 
   } catch (error) {

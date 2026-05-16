@@ -19,7 +19,7 @@ export default function Navbar() {
     { path: '/generate', label: 'Generate', icon: Music },
     { path: '/analytics', label: 'Analytics', icon: BarChart3 },
     { path: '/database', label: 'DB Explorer', icon: Database },
-    { path: '/admin', label: 'Admin', icon: Shield },
+    ...(user?.isAdmin ? [{ path: '/admin', label: 'Admin', icon: Shield }] : []),
   ]
 
   return (
