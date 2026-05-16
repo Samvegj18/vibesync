@@ -4,7 +4,7 @@
 import { useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { Music, Menu, X, LogIn, User, BarChart3, Sparkles, Compass, Home, Database } from 'lucide-react'
+import { Music, Menu, X, LogIn, User, BarChart3, Sparkles, Compass, Home, Database, Shield } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
 
 export default function Navbar() {
@@ -19,6 +19,7 @@ export default function Navbar() {
     { path: '/generate', label: 'Generate', icon: Music },
     { path: '/analytics', label: 'Analytics', icon: BarChart3 },
     { path: '/database', label: 'DB Explorer', icon: Database },
+    { path: '/admin', label: 'Admin', icon: Shield },
   ]
 
   return (

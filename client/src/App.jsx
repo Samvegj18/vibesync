@@ -13,6 +13,7 @@ import PlaylistGenerator from './pages/PlaylistGenerator'
 import Explore from './pages/Explore'
 import Analytics from './pages/Analytics'
 import DatabaseExplorer from './pages/DatabaseExplorer'
+import AdminPanel from './pages/AdminPanel'
 import VibeBot from './components/VibeBot'
 
 export default function App() {
@@ -31,6 +32,7 @@ export default function App() {
             <Route path="/explore" element={<Explore />} />
             <Route path="/analytics" element={<Analytics />} />
             <Route path="/database" element={<DatabaseExplorer />} />
+            <Route path="/admin" element={<AdminPanel />} />
           </Routes>
           {/* Floating VibeBot chatbot — visible on all pages */}
           <VibeBot />

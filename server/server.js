@@ -33,6 +33,7 @@ const analyticsRoutes = require('./routes/analytics');
 const historyRoutes = require('./routes/history');
 const databaseRoutes = require('./routes/database');
 const spotifyRoutes = require('./routes/spotify');
+const adminRoutes = require('./routes/admin');
 
 // Create Express app
 const app = express();
@@ -69,6 +70,7 @@ app.use('/api/analytics', analyticsRoutes); // Admin analytics dashboard
 app.use('/api/history', historyRoutes);     // Listening history & streaks
 app.use('/api/database', databaseRoutes);  // Database explorer (viva demo)
 app.use('/api/spotify', spotifyRoutes);    // Spotify API integration
+app.use('/api/admin', adminRoutes);        // Admin panel management
 
 // ============================================
 // HEALTH CHECK ROUTE
