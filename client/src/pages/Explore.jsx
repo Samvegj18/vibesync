@@ -64,26 +64,15 @@ export default function Explore() {
   const playSong = async (song, index) => {
     setCurrentIndex(index)
     setPlayerLoading(true)
-    try {
-      const res = await API.get(`/spotify/preview/${song.song_id}`)
-      setCurrentTrack({
-        title: song.title,
-        artist: song.artist_name,
-        cover_image: res.data.cover_image || song.cover_image,
-        preview_url: res.data.preview_url,
-        spotify_url: res.data.spotify_url,
-      })
-      // Record play in database (updates listening_history + play_count via trigger)
-      API.post('/history/track-play', { songId: song.song_id }).then(() => refreshUser()).catch(() => {})
-    } catch {
-      setCurrentTrack({
-        title: song.title,
-        artist: song.artist_name,
-        cover_image: song.cover_image,
-        preview_url: null,
-        spotify_url: null,
-      })
-    }
+    // Use youtube_id directly from song data — no external API call needed
+    setCurrentTrack({
+      title: song.title,
+      artist: song.artist_name,
+      cover_image: song.cover_image,
+      youtube_id: song.youtube_id || null,
+    })
+    // Record play in database
+    API.post('/history/track-play', { songId: song.song_id }).then(() => refreshUser()).catch(() => {})
     setPlayerLoading(false)
   }
 

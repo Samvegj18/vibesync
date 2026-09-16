@@ -69,7 +69,7 @@ exports.getSongsByMood = async (req, res) => {
 
     // Get songs for this mood using junction table
     const [songs] = await db.query(
-      `SELECT s.song_id, s.title, s.duration, s.cover_image, s.play_count,
+      `SELECT s.song_id, s.title, s.duration, s.cover_image, s.play_count, s.youtube_id,
               a.name AS artist_name
        FROM songs s
        INNER JOIN song_mood sm ON s.song_id = sm.song_id

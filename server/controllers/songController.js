@@ -13,12 +13,12 @@ const db = require('../config/db');
 exports.getAllSongs = async (req, res) => {
   try {
     const [songs] = await db.query(
-      `SELECT s.song_id, s.title, s.duration, s.cover_image, 
-              s.audio_url, s.play_count,
+      `SELECT s.song_id, s.title, s.duration, s.cover_image,
+              s.audio_url, s.play_count, s.youtube_id,
               a.name AS artist_name, a.avatar AS artist_avatar
        FROM songs s
        INNER JOIN artists a ON s.artist_id = a.artist_id
-       ORDER BY s.title ASC`
+       ORDER BY s.play_count DESC`
     );
 
     res.json({ success: true, songs });
@@ -34,7 +34,7 @@ exports.getTrendingSongs = async (req, res) => {
     const limit = parseInt(req.query.limit) || 10;
 
     const [songs] = await db.query(
-      `SELECT s.song_id, s.title, s.duration, s.cover_image, s.play_count,
+      `SELECT s.song_id, s.title, s.duration, s.cover_image, s.play_count, s.youtube_id,
               a.name AS artist_name,
               GROUP_CONCAT(m.mood_name) AS moods
        FROM songs s
@@ -65,13 +65,13 @@ exports.searchSongs = async (req, res) => {
     const searchTerm = `%${q}%`;
 
     const [songs] = await db.query(
-      `SELECT s.song_id, s.title, s.duration, s.cover_image, s.play_count,
+      `SELECT s.song_id, s.title, s.duration, s.cover_image, s.play_count, s.youtube_id,
               a.name AS artist_name
        FROM songs s
        INNER JOIN artists a ON s.artist_id = a.artist_id
        WHERE s.title LIKE ? OR a.name LIKE ?
        ORDER BY s.play_count DESC
-       LIMIT 20`,
+       LIMIT 30`,
       [searchTerm, searchTerm]
     );
 
