@@ -149,8 +149,13 @@ export default function Explore() {
               onClick={() => playSong(song, i)}
               className={`glass rounded-2xl p-4 group cursor-pointer hover:bg-white/10 transition ${currentIndex === i ? 'ring-2 ring-neon-purple bg-white/10' : ''}`}>
               <div className="w-full aspect-square rounded-xl bg-gradient-to-br from-neon-purple/20 to-neon-pink/20 flex items-center justify-center mb-3 relative overflow-hidden">
-                {song.cover_image?.startsWith('http') ? (
-                  <img src={song.cover_image} alt={song.title} className="w-full h-full object-cover" />
+                {(song.youtube_id || song.cover_image?.startsWith('http')) ? (
+                  <img
+                    src={song.youtube_id ? `https://img.youtube.com/vi/${song.youtube_id}/mqdefault.jpg` : song.cover_image}
+                    alt={song.title}
+                    className="w-full h-full object-cover"
+                    onError={e => { e.target.style.display = 'none' }}
+                  />
                 ) : (
                   <Music size={32} className="text-white/20" />
                 )}
